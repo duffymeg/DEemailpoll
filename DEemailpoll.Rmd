@@ -81,6 +81,7 @@ Poll received just over 417 responses. One of these was completely blank, so I d
 library(ggplot2)
 library(dplyr)
 library(cowplot)
+require(likert)
 ```
 
 ```{r, read in data}
@@ -89,3 +90,110 @@ head(emaildata)
 str(emaildata)
 ```
 
+```{r, summarize current inbox status}
+CurrentSum <- 
+  emaildata %>%
+  filter(!is.na(CurrentEmails01)) %>%
+  group_by(CurrentEmails01) %>%
+  summarise(n=n()) %>%
+  mutate(rel.freq = round(100 * n/sum(n), 0))
+
+CurrentSum
+
+as.factor(CurrentSum$CurrentEmails01)
+
+currentemailplot <- ggplot(CurrentSum,aes(x=CurrentEmails01,y=rel.freq)) +
+  geom_bar(stat="identity") +
+  ylab("Percent of responses") +
+  theme(legend.position="none") +
+  coord_flip() +
+  theme(axis.text.y = element_blank()) +
+  annotate("text", x = 1, y = 1, label = "Inbox zero!!!", hjust=0, size=6, color = "white") +
+  annotate("text", x = 2, y = 1, label = "< 20", hjust=0, size=6, color = "white") +
+  annotate("text", x = 3, y = 1, label = "20-50", hjust=0, size=6, color = "white") +
+  annotate("text", x = 4, y = 1, label = "50-100", hjust=0, size=6, color = "white") +
+  annotate("text", x = 5, y = 1, label = "100-500", hjust=0, size=6, color = "white") +
+  annotate("text", x = 6, y = 1, label = "> 500", hjust=0, size=6, color = "white") +
+  ggtitle("How many work-related emails are in your inbox now?") +
+  theme(plot.title=element_text(size=12)) +
+  theme(axis.title.y=element_blank()) +
+  theme(axis.title.x=element_text(size=12)) +
+  theme(axis.ticks.y = element_blank())
+
+save_plot("currentemailplot.jpg", currentemailplot)
+
+currentemailplot
+```
+
+```{r, summarize target inbox status}
+TargetSum <- 
+  emaildata %>%
+  filter(!is.na(TargetEmails01)) %>%
+  group_by(TargetEmails01) %>%
+  summarise(n=n()) %>%
+  mutate(rel.freq = round(100 * n/sum(n), 0))
+
+TargetSum
+
+as.factor(TargetSum$TargetEmails01)
+
+targetemailplot <- ggplot(TargetSum,aes(x=TargetEmails01,y=rel.freq)) +
+  geom_bar(stat="identity") +
+  ylab("Percent of responses") +
+  theme(legend.position="none") +
+  coord_flip() +
+  theme(axis.text.y = element_blank()) +
+  annotate("text", x = 1, y = 1, label = "Inbox zero!!!", hjust=0, size=6, color = "white") +
+  annotate("text", x = 2, y = 1, label = "< 20", hjust=0, size=6, color = "white") +
+  annotate("text", x = 3, y = 1, label = "20-50", hjust=0, size=6, color = "white") +
+  annotate("text", x = 4, y = 4, label = "50-100", hjust=0, size=6, color = "black") +
+  annotate("text", x = 5, y = 4, label = "100-500", hjust=0, size=6, color = "black") +
+  annotate("text", x = 6, y = 4, label = "> 500", hjust=0, size=6, color = "black") + 
+  annotate("text", x = 7, y = 1, label = "I don't care", hjust=0, size=6, color = "white") +
+  ggtitle("What is your goal for the number of work-related \nemails you aim have in your inbox?") +
+  theme(plot.title=element_text(size=12)) +
+  theme(axis.title.y=element_blank()) +
+  theme(axis.title.x=element_text(size=12)) +
+  theme(axis.ticks.y = element_blank())
+
+save_plot("targetemailplot.jpg", targetemailplot)
+
+currentemailplot
+```
+
+```{r, summarize overwhelmed status}
+OverwhelmedSum <- 
+  emaildata %>%
+  filter(!is.na(Overwhelmed01)) %>%
+  group_by(Overwhelmed01) %>%
+  summarise(n=n()) %>%
+  mutate(rel.freq = round(100 * n/sum(n), 0))
+
+OverwhelmedSum
+
+as.factor(OverwhelmedSum$Overwhelmed01)
+
+overwhelmedplot <- ggplot(OverwhelmedSum,aes(x=Overwhelmed01,y=rel.freq)) +
+  geom_bar(stat="identity") +
+  ylab("Percent of responses") +
+  theme(legend.position="none") +
+  coord_flip() +
+  theme(axis.text.y = element_blank()) +
+  annotate("text", x = 1, y = 3, label = "never", hjust=0, size=6, color = "black") +
+  annotate("text", x = 2, y = 1, label = "rarely", hjust=0, size=6, color = "white") +
+  annotate("text", x = 3, y = 1, label = "sometimes", hjust=0, size=6, color = "white") +
+  annotate("text", x = 4, y = 1, label = "most of the time", hjust=0, size=6, color = "white") +
+  annotate("text", x = 5, y = 1, label = "always", hjust=0, size=6, color = "white") +
+  ggtitle("How often do you feel overwhelmed by email?") +
+  theme(plot.title=element_text(size=12)) +
+  theme(axis.title.y=element_blank()) +
+  theme(axis.title.x=element_text(size=12)) +
+  theme(axis.ticks.y = element_blank())
+
+save_plot("overwhelmedplot.jpg", overwhelmedplot)
+
+overwhelmedplot
+```
+
+Now that basic results are plotted, plan to do Likert analyses, similar to ones done here:
+https://github.com/duffymeg/DEAuthorshipPoll/blob/master/AuthorshipPollAnalysis.Rmd
