@@ -1,0 +1,91 @@
+---
+title: "Dynamic Ecology Email Poll Results"
+author: "Meghan Duffy"
+date: "November 6, 2016"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", error = TRUE)
+```
+
+# Analysis of poll asking Dynamic Ecology readers about their email
+Poll appeared October 24, 2016 and closed on November 6, 2016
+Poll available at:
+https://dynamicecology.wordpress.com/2016/10/24/how-do-you-manage-email/
+
+## First, more about the poll and responses
+Poll received just over 417 responses. One of these was completely blank, so I deleted it, leaving 416. 
+
+### Q1: How many work-related emails are in your inbox now?
+```
+1 = Inbox zero!!!
+2 = < 20
+3 = 20-50
+4 = 50-100
+5 = 100-500
+6 = > 500
+```
+
+### Q2: What is your goal for the number of work-related emails you aim have in your inbox?
+```
+1 = Inbox zero!!!
+2 = < 20
+3 = 20-50
+4 = 50-100
+5 = 100-500
+6 = > 500
+7 = I don't care how many emails are in my inbox
+```
+
+### Q3: How often do you feel overwhelmed by email?
+```
+1 = never
+2 = rarely
+3 = sometimes
+4 = most of the time
+5 = always
+```
+
+### Q4: Which of the following best describes your current position?
+```
+1 = Undergrad student
+2 = Grad student
+3 = Postdoc
+4 = Research scientist in academia
+5 = Assistant professor
+6 = Associate professor
+7 = Full professor
+8 = Technician
+9 = Research scientist in industry
+10 = Research scientist in government
+11 = Scientist at an NGO/non-profit
+12 = Other government position
+13 = Other
+```
+
+### Q5: How old are you?
+```
+1 = <25
+2 = 25-34
+3 = 35-44
+4 = 45-54
+5 = 55-64
+6 = >65-74
+7 = >75
+```
+
+## Results
+
+```{r,load libraries,message=FALSE,echo=FALSE}
+library(ggplot2)
+library(dplyr)
+library(cowplot)
+```
+
+```{r, read in data}
+emaildata <- read.csv("DynamicEcologyemailquiz.csv", na.strings = ".")
+head(emaildata)
+str(emaildata)
+```
+
