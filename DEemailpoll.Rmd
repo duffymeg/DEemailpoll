@@ -195,5 +195,172 @@ save_plot("overwhelmedplot.jpg", overwhelmedplot)
 overwhelmedplot
 ```
 
-Now that basic results are plotted, plan to do Likert analyses, similar to ones done here:
-https://github.com/duffymeg/DEAuthorshipPoll/blob/master/AuthorshipPollAnalysis.Rmd
+Now that basic results are plotted, moving on to some more interesting things. First, some cross tabs:
+```{r, cross tabs}
+xtabs(~CurrentEmails+CurrentPosition,data=emaildata)
+xtabs(~Overwhelmed+CurrentPosition,data=emaildata)
+xtabs(~TargetEmails+CurrentPosition,data=emaildata)
+```
+
+Now, using the Likert package:
+```{R, Likert cross tabs on current email data}
+## first, subsetting the data to grad students, postdocs, asst/assoc/full profs
+academicpathdata <- subset(emaildata, CurrentPosition == "Grad student" | CurrentPosition == "Postdoc" | CurrentPosition == "Assistant professor" | CurrentPosition == "Associate professor" | CurrentPosition == "Full professor")
+
+currentdata <-
+  academicpathdata %>%
+  filter(CurrentEmails01 != "NA", TargetEmails01 != "NA", 
+         Overwhelmed01 != "NA", Age01 != "NA") %>% 
+  select(CurrentEmails)
+
+# order the data
+currentdata$CurrentEmails <- factor(currentdata$CurrentEmails, 
+                                      c("Inbox zero!!!",
+                                        "<20",
+                                        "20-50",
+                                        "50-100",
+                                        "100-500",
+                                        ">500"))
+
+# changing the column name to the question
+colnames(currentdata)[1] <- "How many work-related emails are in your inbox now?"
+
+## subsetting the likert data AND the grouping variables
+currentdata_grouping <-
+  academicpathdata %>%
+  filter(CurrentEmails01 != "NA", TargetEmails01 != "NA", 
+         Overwhelmed01 != "NA", Age01 != "NA") %>%
+  select(TargetEmails, Overwhelmed, CurrentPosition, Age) 
+
+currentdata_grouping$TargetEmails <- factor(currentdata_grouping$TargetEmails, 
+                                            c("Inbox zero!!!", 
+                                              "<20", 
+                                              "20-50",
+                                              "50-100",
+                                              "100-500", 
+                                              ">500",
+                                              "I don't care how many emails are in my inbox"))
+
+currentdata_grouping$Overwhelmed <- factor(currentdata_grouping$Overwhelmed, 
+                                            c("Never", 
+                                              "Rarely", 
+                                              "Sometimes",
+                                              "Most of the time",
+                                              "Always"))
+
+currentdata_grouping$CurrentPosition <- factor(currentdata_grouping$CurrentPosition, 
+                                            c("Grad student", 
+                                              "Postdoc",
+                                              "Assistant professor",
+                                              "Associate professor",
+                                              "Full professor"))
+
+likert_11 <- likert(currentdata, grouping = currentdata_grouping$CurrentPosition)
+plot(likert_11)
+```
+
+```{R, Likert cross tabs on target email data}
+targetdata <-
+  academicpathdata %>%
+  filter(CurrentEmails01 != "NA", TargetEmails01 != "NA", 
+         Overwhelmed01 != "NA", Age01 != "NA") %>% 
+  select(TargetEmails)
+
+# order the data
+targetdata$TargetEmails <- factor(targetdata$TargetEmails, 
+                                      c("Inbox zero!!!",
+                                        "<20",
+                                        "20-50",
+                                        "50-100",
+                                        "100-500",
+                                        ">500",
+                                        "I don't care how many emails are in my inbox"))
+
+# changing the column name to the question
+colnames(targetdata)[1] <- "What is your goal for the number of work-related emails you aim have in your inbox?"
+
+## subsetting the likert data AND the grouping variables
+targetdata_grouping <-
+  academicpathdata %>%
+  filter(CurrentEmails01 != "NA", TargetEmails01 != "NA", 
+         Overwhelmed01 != "NA", Age01 != "NA") %>%
+  select(CurrentEmails, Overwhelmed, CurrentPosition, Age) 
+
+targetdata_grouping$CurrentEmails <- factor(targetdata_grouping$CurrentEmails, 
+                                            c("Inbox zero!!!", 
+                                              "<20", 
+                                              "20-50",
+                                              "50-100",
+                                              "100-500", 
+                                              ">500"))
+
+targetdata_grouping$Overwhelmed <- factor(targetdata_grouping$Overwhelmed, 
+                                            c("Never", 
+                                              "Rarely", 
+                                              "Sometimes",
+                                              "Most of the time",
+                                              "Always"))
+
+targetdata_grouping$CurrentPosition <- factor(targetdata_grouping$CurrentPosition, 
+                                            c("Grad student", 
+                                              "Postdoc",
+                                              "Assistant professor",
+                                              "Associate professor",
+                                              "Full professor"))
+
+likert_21 <- likert(targetdata, grouping = targetdata_grouping$CurrentPosition)
+plot(likert_21)
+```
+
+```{r, Likert analysis of overwhelmed question}
+overwhelmeddata <-
+  academicpathdata %>%
+  filter(CurrentEmails01 != "NA", TargetEmails01 != "NA", 
+         Overwhelmed01 != "NA", Age01 != "NA") %>% 
+  select(Overwhelmed)
+
+# order the data
+overwhelmeddata$Overwhelmed <- factor(overwhelmeddata$Overwhelmed, 
+                                      c("Never", 
+                                        "Rarely", 
+                                        "Sometimes",
+                                        "Most of the time",
+                                        "Always"))
+
+# changing the column name to the question
+colnames(overwhelmeddata)[1] <- "How often do you feel overwhelmed by email?"
+
+## subsetting the likert data AND the grouping variables
+
+overwhelmeddata_grouping <-
+  academicpathdata %>%
+  filter(CurrentEmails01 != "NA", TargetEmails01 != "NA", 
+         Overwhelmed01 != "NA", Age01 != "NA") %>%
+  select(CurrentEmails, TargetEmails, CurrentPosition, Age) 
+
+overwhelmeddata_grouping$CurrentEmails <- factor(overwhelmeddata_grouping$CurrentEmails, 
+                                            c("Inbox zero!!!", 
+                                              "<20", 
+                                              "20-50",
+                                              "50-100",
+                                              "100-500", 
+                                              ">500"))
+overwhelmeddata_grouping$TargetEmails <- factor(overwhelmeddata_grouping$TargetEmails, 
+                                            c("Inbox zero!!!", 
+                                              "<20", 
+                                              "20-50",
+                                              "50-100",
+                                              "100-500", 
+                                              ">500",
+                                              "I don't care how many emails are in my inbox"))
+
+overwhelmeddata_grouping$CurrentPosition <- factor(overwhelmeddata_grouping$CurrentPosition, 
+                                            c("Grad student", 
+                                              "Postdoc",
+                                              "Assistant professor",
+                                              "Associate professor",
+                                              "Full professor"))
+
+likert_31 <- likert(overwhelmeddata, grouping = overwhelmeddata_grouping$CurrentPosition)
+plot(likert_31)
+```

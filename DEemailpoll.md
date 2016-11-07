@@ -117,9 +117,10 @@ CurrentSum <-
   mutate(rel.freq = round(100 * n/sum(n), 0))
 
 CurrentSum
-#> # A tibble: 6 x 3
+#> Source: local data frame [6 x 3]
+#> 
 #>   CurrentEmails01     n rel.freq
-#>             <int> <int>    <dbl>
+#>             (int) (int)    (dbl)
 #> 1               1    60       15
 #> 2               2   130       32
 #> 3               3    57       14
@@ -165,9 +166,10 @@ TargetSum <-
   mutate(rel.freq = round(100 * n/sum(n), 0))
 
 TargetSum
-#> # A tibble: 7 x 3
+#> Source: local data frame [7 x 3]
+#> 
 #>   TargetEmails01     n rel.freq
-#>            <int> <int>    <dbl>
+#>            (int) (int)    (dbl)
 #> 1              1   162       39
 #> 2              2   125       30
 #> 3              3    24        6
@@ -215,9 +217,10 @@ OverwhelmedSum <-
   mutate(rel.freq = round(100 * n/sum(n), 0))
 
 OverwhelmedSum
-#> # A tibble: 5 x 3
+#> Source: local data frame [5 x 3]
+#> 
 #>   Overwhelmed01     n rel.freq
-#>           <int> <int>    <dbl>
+#>           (int) (int)    (dbl)
 #> 1             1     8        2
 #> 2             2    98       24
 #> 3             3   183       44
@@ -252,4 +255,369 @@ overwhelmedplot
 
 ![](DEemailpoll_files/figure-markdown_github/summarize%20overwhelmed%20status-1.png)
 
-Now that basic results are plotted, plan to do Likert analyses, similar to ones done here: <https://github.com/duffymeg/DEAuthorshipPoll/blob/master/AuthorshipPollAnalysis.Rmd>
+Now that basic results are plotted, moving on to some more interesting things. First, some cross tabs:
+
+``` r
+xtabs(~CurrentEmails+CurrentPosition,data=emaildata)
+#>                CurrentPosition
+#> CurrentEmails   Assistant professor Associate professor Full professor
+#>   <20                            22                  11              7
+#>   >500                           21                  15             19
+#>   100-500                        13                   4              5
+#>   20-50                          10                   7              4
+#>   50-100                         10                   5              4
+#>   Inbox zero!!!                   8                   5              2
+#>                CurrentPosition
+#> CurrentEmails   Grad student Other Other government position Postdoc
+#>   <20                     45     1                         1      25
+#>   >500                     5     2                         3      12
+#>   100-500                  6     2                         1       2
+#>   20-50                   10     0                         2      12
+#>   50-100                   6     1                         0       2
+#>   Inbox zero!!!           15     1                         0      20
+#>                CurrentPosition
+#> CurrentEmails   Research scientist in academia
+#>   <20                                        7
+#>   >500                                       8
+#>   100-500                                    1
+#>   20-50                                      4
+#>   50-100                                     0
+#>   Inbox zero!!!                              3
+#>                CurrentPosition
+#> CurrentEmails   Research scientist in government
+#>   <20                                          4
+#>   >500                                         2
+#>   100-500                                      1
+#>   20-50                                        4
+#>   50-100                                       1
+#>   Inbox zero!!!                                4
+#>                CurrentPosition
+#> CurrentEmails   Research scientist in industry
+#>   <20                                        1
+#>   >500                                       2
+#>   100-500                                    1
+#>   20-50                                      0
+#>   50-100                                     0
+#>   Inbox zero!!!                              0
+#>                CurrentPosition
+#> CurrentEmails   Scientist at an NGO/non-profit Undergraduate student
+#>   <20                                        4                     2
+#>   >500                                       1                     0
+#>   100-500                                    4                     0
+#>   20-50                                      3                     1
+#>   50-100                                     1                     1
+#>   Inbox zero!!!                              0                     1
+xtabs(~Overwhelmed+CurrentPosition,data=emaildata)
+#>                   CurrentPosition
+#> Overwhelmed        Assistant professor Associate professor Full professor
+#>   Always                             9                   8              7
+#>   Most of the time                  28                  16             13
+#>   Never                              1                   1              0
+#>   Rarely                            15                   6              5
+#>   Sometimes                         33                  19             13
+#>                   CurrentPosition
+#> Overwhelmed        Grad student Other Other government position Postdoc
+#>   Always                      0     3                         2       1
+#>   Most of the time            9     2                         0      12
+#>   Never                       2     0                         0       2
+#>   Rarely                     28     1                         4      20
+#>   Sometimes                  47     3                         1      39
+#>                   CurrentPosition
+#> Overwhelmed        Research scientist in academia
+#>   Always                                        1
+#>   Most of the time                              3
+#>   Never                                         1
+#>   Rarely                                        7
+#>   Sometimes                                    11
+#>                   CurrentPosition
+#> Overwhelmed        Research scientist in government
+#>   Always                                          0
+#>   Most of the time                                4
+#>   Never                                           1
+#>   Rarely                                          7
+#>   Sometimes                                       4
+#>                   CurrentPosition
+#> Overwhelmed        Research scientist in industry
+#>   Always                                        1
+#>   Most of the time                              0
+#>   Never                                         0
+#>   Rarely                                        0
+#>   Sometimes                                     3
+#>                   CurrentPosition
+#> Overwhelmed        Scientist at an NGO/non-profit Undergraduate student
+#>   Always                                        1                     0
+#>   Most of the time                              2                     1
+#>   Never                                         0                     0
+#>   Rarely                                        2                     2
+#>   Sometimes                                     8                     2
+xtabs(~TargetEmails+CurrentPosition,data=emaildata)
+#>                                               CurrentPosition
+#> TargetEmails                                   Assistant professor
+#>   <20                                                           26
+#>   >500                                                           2
+#>   100-500                                                        2
+#>   20-50                                                          6
+#>   50-100                                                         1
+#>   I don't care how many emails are in my inbox                  19
+#>   Inbox zero!!!                                                 30
+#>                                               CurrentPosition
+#> TargetEmails                                   Associate professor
+#>   <20                                                           15
+#>   >500                                                           3
+#>   100-500                                                        4
+#>   20-50                                                          3
+#>   50-100                                                         1
+#>   I don't care how many emails are in my inbox                   6
+#>   Inbox zero!!!                                                 18
+#>                                               CurrentPosition
+#> TargetEmails                                   Full professor Grad student
+#>   <20                                                       9           24
+#>   >500                                                      4            3
+#>   100-500                                                   0            1
+#>   20-50                                                     2            3
+#>   50-100                                                    5            0
+#>   I don't care how many emails are in my inbox             11            8
+#>   Inbox zero!!!                                             9           48
+#>                                               CurrentPosition
+#> TargetEmails                                   Other
+#>   <20                                              1
+#>   >500                                             2
+#>   100-500                                          0
+#>   20-50                                            1
+#>   50-100                                           2
+#>   I don't care how many emails are in my inbox     0
+#>   Inbox zero!!!                                    3
+#>                                               CurrentPosition
+#> TargetEmails                                   Other government position
+#>   <20                                                                  3
+#>   >500                                                                 0
+#>   100-500                                                              0
+#>   20-50                                                                2
+#>   50-100                                                               0
+#>   I don't care how many emails are in my inbox                         2
+#>   Inbox zero!!!                                                        0
+#>                                               CurrentPosition
+#> TargetEmails                                   Postdoc
+#>   <20                                               23
+#>   >500                                               0
+#>   100-500                                            0
+#>   20-50                                              2
+#>   50-100                                             0
+#>   I don't care how many emails are in my inbox      13
+#>   Inbox zero!!!                                     35
+#>                                               CurrentPosition
+#> TargetEmails                                   Research scientist in academia
+#>   <20                                                                       7
+#>   >500                                                                      0
+#>   100-500                                                                   0
+#>   20-50                                                                     1
+#>   50-100                                                                    1
+#>   I don't care how many emails are in my inbox                              6
+#>   Inbox zero!!!                                                             8
+#>                                               CurrentPosition
+#> TargetEmails                                   Research scientist in government
+#>   <20                                                                         7
+#>   >500                                                                        0
+#>   100-500                                                                     0
+#>   20-50                                                                       1
+#>   50-100                                                                      1
+#>   I don't care how many emails are in my inbox                                2
+#>   Inbox zero!!!                                                               5
+#>                                               CurrentPosition
+#> TargetEmails                                   Research scientist in industry
+#>   <20                                                                       2
+#>   >500                                                                      0
+#>   100-500                                                                   0
+#>   20-50                                                                     0
+#>   50-100                                                                    0
+#>   I don't care how many emails are in my inbox                              1
+#>   Inbox zero!!!                                                             1
+#>                                               CurrentPosition
+#> TargetEmails                                   Scientist at an NGO/non-profit
+#>   <20                                                                       5
+#>   >500                                                                      0
+#>   100-500                                                                   1
+#>   20-50                                                                     3
+#>   50-100                                                                    1
+#>   I don't care how many emails are in my inbox                              1
+#>   Inbox zero!!!                                                             2
+#>                                               CurrentPosition
+#> TargetEmails                                   Undergraduate student
+#>   <20                                                              3
+#>   >500                                                             0
+#>   100-500                                                          0
+#>   20-50                                                            0
+#>   50-100                                                           0
+#>   I don't care how many emails are in my inbox                     0
+#>   Inbox zero!!!                                                    2
+```
+
+Now, using the Likert package:
+
+``` r
+## first, subsetting the data to grad students, postdocs, asst/assoc/full profs
+academicpathdata <- subset(emaildata, CurrentPosition == "Grad student" | CurrentPosition == "Postdoc" | CurrentPosition == "Assistant professor" | CurrentPosition == "Associate professor" | CurrentPosition == "Full professor")
+
+currentdata <-
+  academicpathdata %>%
+  filter(CurrentEmails01 != "NA", TargetEmails01 != "NA", 
+         Overwhelmed01 != "NA", Age01 != "NA") %>% 
+  select(CurrentEmails)
+
+# order the data
+currentdata$CurrentEmails <- factor(currentdata$CurrentEmails, 
+                                      c("Inbox zero!!!",
+                                        "<20",
+                                        "20-50",
+                                        "50-100",
+                                        "100-500",
+                                        ">500"))
+
+# changing the column name to the question
+colnames(currentdata)[1] <- "How many work-related emails are in your inbox now?"
+
+## subsetting the likert data AND the grouping variables
+currentdata_grouping <-
+  academicpathdata %>%
+  filter(CurrentEmails01 != "NA", TargetEmails01 != "NA", 
+         Overwhelmed01 != "NA", Age01 != "NA") %>%
+  select(TargetEmails, Overwhelmed, CurrentPosition, Age) 
+
+currentdata_grouping$TargetEmails <- factor(currentdata_grouping$TargetEmails, 
+                                            c("Inbox zero!!!", 
+                                              "<20", 
+                                              "20-50",
+                                              "50-100",
+                                              "100-500", 
+                                              ">500",
+                                              "I don't care how many emails are in my inbox"))
+
+currentdata_grouping$Overwhelmed <- factor(currentdata_grouping$Overwhelmed, 
+                                            c("Never", 
+                                              "Rarely", 
+                                              "Sometimes",
+                                              "Most of the time",
+                                              "Always"))
+
+currentdata_grouping$CurrentPosition <- factor(currentdata_grouping$CurrentPosition, 
+                                            c("Grad student", 
+                                              "Postdoc",
+                                              "Assistant professor",
+                                              "Associate professor",
+                                              "Full professor"))
+
+likert_11 <- likert(currentdata, grouping = currentdata_grouping$CurrentPosition)
+plot(likert_11)
+```
+
+![](DEemailpoll_files/figure-markdown_github/Likert%20cross%20tabs%20on%20current%20email%20data-1.png)
+
+``` r
+targetdata <-
+  academicpathdata %>%
+  filter(CurrentEmails01 != "NA", TargetEmails01 != "NA", 
+         Overwhelmed01 != "NA", Age01 != "NA") %>% 
+  select(TargetEmails)
+
+# order the data
+targetdata$TargetEmails <- factor(targetdata$TargetEmails, 
+                                      c("Inbox zero!!!",
+                                        "<20",
+                                        "20-50",
+                                        "50-100",
+                                        "100-500",
+                                        ">500",
+                                        "I don't care how many emails are in my inbox"))
+
+# changing the column name to the question
+colnames(targetdata)[1] <- "What is your goal for the number of work-related emails you aim have in your inbox?"
+
+## subsetting the likert data AND the grouping variables
+targetdata_grouping <-
+  academicpathdata %>%
+  filter(CurrentEmails01 != "NA", TargetEmails01 != "NA", 
+         Overwhelmed01 != "NA", Age01 != "NA") %>%
+  select(CurrentEmails, Overwhelmed, CurrentPosition, Age) 
+
+targetdata_grouping$CurrentEmails <- factor(targetdata_grouping$CurrentEmails, 
+                                            c("Inbox zero!!!", 
+                                              "<20", 
+                                              "20-50",
+                                              "50-100",
+                                              "100-500", 
+                                              ">500"))
+
+targetdata_grouping$Overwhelmed <- factor(targetdata_grouping$Overwhelmed, 
+                                            c("Never", 
+                                              "Rarely", 
+                                              "Sometimes",
+                                              "Most of the time",
+                                              "Always"))
+
+targetdata_grouping$CurrentPosition <- factor(targetdata_grouping$CurrentPosition, 
+                                            c("Grad student", 
+                                              "Postdoc",
+                                              "Assistant professor",
+                                              "Associate professor",
+                                              "Full professor"))
+
+likert_21 <- likert(targetdata, grouping = targetdata_grouping$CurrentPosition)
+plot(likert_21)
+```
+
+![](DEemailpoll_files/figure-markdown_github/Likert%20cross%20tabs%20on%20target%20email%20data-1.png)
+
+``` r
+overwhelmeddata <-
+  academicpathdata %>%
+  filter(CurrentEmails01 != "NA", TargetEmails01 != "NA", 
+         Overwhelmed01 != "NA", Age01 != "NA") %>% 
+  select(Overwhelmed)
+
+# order the data
+overwhelmeddata$Overwhelmed <- factor(overwhelmeddata$Overwhelmed, 
+                                      c("Never", 
+                                        "Rarely", 
+                                        "Sometimes",
+                                        "Most of the time",
+                                        "Always"))
+
+# changing the column name to the question
+colnames(overwhelmeddata)[1] <- "How often do you feel overwhelmed by email?"
+
+## subsetting the likert data AND the grouping variables
+
+overwhelmeddata_grouping <-
+  academicpathdata %>%
+  filter(CurrentEmails01 != "NA", TargetEmails01 != "NA", 
+         Overwhelmed01 != "NA", Age01 != "NA") %>%
+  select(CurrentEmails, TargetEmails, CurrentPosition, Age) 
+
+overwhelmeddata_grouping$CurrentEmails <- factor(overwhelmeddata_grouping$CurrentEmails, 
+                                            c("Inbox zero!!!", 
+                                              "<20", 
+                                              "20-50",
+                                              "50-100",
+                                              "100-500", 
+                                              ">500"))
+overwhelmeddata_grouping$TargetEmails <- factor(overwhelmeddata_grouping$TargetEmails, 
+                                            c("Inbox zero!!!", 
+                                              "<20", 
+                                              "20-50",
+                                              "50-100",
+                                              "100-500", 
+                                              ">500",
+                                              "I don't care how many emails are in my inbox"))
+
+overwhelmeddata_grouping$CurrentPosition <- factor(overwhelmeddata_grouping$CurrentPosition, 
+                                            c("Grad student", 
+                                              "Postdoc",
+                                              "Assistant professor",
+                                              "Associate professor",
+                                              "Full professor"))
+
+likert_31 <- likert(overwhelmeddata, grouping = overwhelmeddata_grouping$CurrentPosition)
+plot(likert_31)
+```
+
+![](DEemailpoll_files/figure-markdown_github/Likert%20analysis%20of%20overwhelmed%20question-1.png)
