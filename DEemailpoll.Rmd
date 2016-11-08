@@ -256,15 +256,21 @@ currentdata_grouping$CurrentPosition <- factor(currentdata_grouping$CurrentPosit
                                               "Full professor"))
 
 likert_11 <- likert(currentdata, grouping = currentdata_grouping$CurrentPosition)
-plot(likert_11)
+likert_11plot <- plot(likert_11)
+save_plot("likert_11.jpg", likert_11plot, base_height = 4, base_width = 10)
+likert_11plot
 
 ## this next plot isn't ordering correctly. Need to figure that out.
 likert_12 <- likert(currentdata, grouping = currentdata_grouping$TargetEmails)
-plot(likert_12)
+likert_12plot <- plot(likert_12)
+save_plot("likert_12.jpg", likert_12plot, base_height = 4, base_width = 10)
+likert_12plot
 
 ## this next plot would benefit from having "How often do you feel overwhelmed by email?" on the y-axis to explain the grouping variable.
 likert_13 <- likert(currentdata, grouping = currentdata_grouping$Overwhelmed)
-plot(likert_13) 
+likert_13plot <- plot(likert_13)
+save_plot("likert_13.jpg", likert_13plot, base_height = 4, base_width = 10)
+likert_13plot
 ```
 
 ```{R, Likert cross tabs on target email data}
@@ -317,7 +323,19 @@ targetdata_grouping$CurrentPosition <- factor(targetdata_grouping$CurrentPositio
                                               "Full professor"))
 
 likert_21 <- likert(targetdata, grouping = targetdata_grouping$CurrentPosition)
-plot(likert_21)
+likert_21plot <- plot(likert_21)
+save_plot("likert_21.jpg", likert_21plot, base_height = 4, base_width = 10)
+likert_21plot
+
+likert_22 <- likert(targetdata, grouping = targetdata_grouping$CurrentEmails)
+likert_22plot <- plot(likert_22)
+save_plot("likert_22.jpg", likert_22plot, base_height = 4, base_width = 10)
+likert_22plot
+
+likert_23 <- likert(targetdata, grouping = targetdata_grouping$Overwhelmed)
+likert_23plot <- plot(likert_23)
+save_plot("likert_23.jpg", likert_23plot, base_height = 4, base_width = 10)
+likert_23plot
 ```
 
 ```{r, Likert analysis of overwhelmed question}
@@ -370,5 +388,7 @@ overwhelmeddata_grouping$CurrentPosition <- factor(overwhelmeddata_grouping$Curr
                                               "Full professor"))
 
 likert_31 <- likert(overwhelmeddata, grouping = overwhelmeddata_grouping$CurrentPosition)
-plot(likert_31)
+likert_31plot <- plot(likert_31)
+save_plot("likert_31.jpg", likert_31plot, base_height = 4, base_width = 10)
+likert_31plot
 ```
