@@ -233,13 +233,13 @@ currentdata_grouping <-
   select(TargetEmails, Overwhelmed, CurrentPosition, Age) 
 
 currentdata_grouping$TargetEmails <- factor(currentdata_grouping$TargetEmails, 
-                                            c("Inbox zero!!!", 
-                                              "<20", 
-                                              "20-50",
-                                              "50-100",
-                                              "100-500", 
-                                              ">500",
-                                              "I don't care how many emails are in my inbox"))
+                                      c("Inbox zero!!!",
+                                        "<20",
+                                        "20-50",
+                                        "50-100",
+                                        "100-500",
+                                        ">500",
+                                        "I don't care how many emails are in my inbox"))
 
 currentdata_grouping$Overwhelmed <- factor(currentdata_grouping$Overwhelmed, 
                                             c("Never", 
