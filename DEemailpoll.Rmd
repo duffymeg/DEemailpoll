@@ -268,7 +268,7 @@ likert_12plot
 
 ## this next plot would benefit from having "How often do you feel overwhelmed by email?" on the y-axis to explain the grouping variable.
 likert_13 <- likert(currentdata, grouping = currentdata_grouping$Overwhelmed)
-likert_13plot <- plot(likert_13)
+likert_13plot <- plot(likert_13) + xlab("How often do you feel overwhelmed by email?")
 save_plot("likert_13.jpg", likert_13plot, base_height = 4, base_width = 10)
 likert_13plot
 ```
