@@ -268,7 +268,7 @@ likert_12plot
 
 ## this next plot would benefit from having "How often do you feel overwhelmed by email?" on the y-axis to explain the grouping variable.
 likert_13 <- likert(currentdata, grouping = currentdata_grouping$Overwhelmed)
-likert_13plot <- plot(likert_13) + xlab("How often do you feel overwhelmed by email?")
+likert_13plot <- plot(likert_13) + xlab("How often do you feel \noverwhelmed by email?")
 save_plot("likert_13.jpg", likert_13plot, base_height = 4, base_width = 10)
 likert_13plot
 ```
@@ -391,4 +391,23 @@ likert_31 <- likert(overwhelmeddata, grouping = overwhelmeddata_grouping$Current
 likert_31plot <- plot(likert_31)
 save_plot("likert_31.jpg", likert_31plot, base_height = 4, base_width = 10)
 likert_31plot
+```
+
+```{r, looking at academic vs. government vs. industry vs. NGO}
+# First, make a new variable that splits these out
+diffpathdata <- subset(emaildata, CurrentPosition == "AssistantProfessor" | CurrentPosition == "Associate professor" | CurrentPosition == "Full professor" | CurrentPosition == "Research scientist in government" | CurrentPosition == "Research scientist in academia" | CurrentPosition == "Research scientist in industry" | CurrentPosition == "Scientist at an NGO/non-profit" | CurrentPosition == "Other government position")
+
+diffpathdata$path <- ifelse(diffpathdata$CurrentPosition == "AssistantProfessor" | diffpathdata$CurrentPosition == "Associate professor" | diffpathdata$CurrentPosition == "Full professor" | diffpathdata$CurrentPosition == "Research scientist in academia", "academia",
+                            ifelse(diffpathdata$CurrentPosition == "Research scientist in government" | diffpathdata$CurrentPosition == "Other government position", "government",
+                            ifelse(diffpathdata$CurrentPosition == "Scientist at an NGO/non-profit", "nonprofit","industry"
+                            )))
+
+PathSampleSize <-
+  diffpathdata %>%
+  group_by(path) %>%
+  summarise(n=n())
+
+PathSampleSize
+
+#hmm, small sample sizes. Not sure it would be useful to compare them, unfortunately.
 ```

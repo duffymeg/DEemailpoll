@@ -484,13 +484,13 @@ currentdata_grouping <-
   select(TargetEmails, Overwhelmed, CurrentPosition, Age) 
 
 currentdata_grouping$TargetEmails <- factor(currentdata_grouping$TargetEmails, 
-                                            c("Inbox zero!!!", 
-                                              "<20", 
-                                              "20-50",
-                                              "50-100",
-                                              "100-500", 
-                                              ">500",
-                                              "I don't care how many emails are in my inbox"))
+                                      c("Inbox zero!!!",
+                                        "<20",
+                                        "20-50",
+                                        "50-100",
+                                        "100-500",
+                                        ">500",
+                                        "I don't care how many emails are in my inbox"))
 
 currentdata_grouping$Overwhelmed <- factor(currentdata_grouping$Overwhelmed, 
                                             c("Never", 
@@ -507,10 +507,34 @@ currentdata_grouping$CurrentPosition <- factor(currentdata_grouping$CurrentPosit
                                               "Full professor"))
 
 likert_11 <- likert(currentdata, grouping = currentdata_grouping$CurrentPosition)
-plot(likert_11)
+likert_11plot <- plot(likert_11)
+save_plot("likert_11.jpg", likert_11plot, base_height = 4, base_width = 10)
+likert_11plot
 ```
 
 ![](DEemailpoll_files/figure-markdown_github/Likert%20cross%20tabs%20on%20current%20email%20data-1.png)
+
+``` r
+
+## this next plot isn't ordering correctly. Need to figure that out.
+likert_12 <- likert(currentdata, grouping = currentdata_grouping$TargetEmails)
+likert_12plot <- plot(likert_12)
+save_plot("likert_12.jpg", likert_12plot, base_height = 4, base_width = 10)
+likert_12plot
+```
+
+![](DEemailpoll_files/figure-markdown_github/Likert%20cross%20tabs%20on%20current%20email%20data-2.png)
+
+``` r
+
+## this next plot would benefit from having "How often do you feel overwhelmed by email?" on the y-axis to explain the grouping variable.
+likert_13 <- likert(currentdata, grouping = currentdata_grouping$Overwhelmed)
+likert_13plot <- plot(likert_13) + xlab("How often do you feel \noverwhelmed by email?")
+save_plot("likert_13.jpg", likert_13plot, base_height = 4, base_width = 10)
+likert_13plot
+```
+
+![](DEemailpoll_files/figure-markdown_github/Likert%20cross%20tabs%20on%20current%20email%20data-3.png)
 
 ``` r
 targetdata <-
@@ -562,10 +586,32 @@ targetdata_grouping$CurrentPosition <- factor(targetdata_grouping$CurrentPositio
                                               "Full professor"))
 
 likert_21 <- likert(targetdata, grouping = targetdata_grouping$CurrentPosition)
-plot(likert_21)
+likert_21plot <- plot(likert_21)
+save_plot("likert_21.jpg", likert_21plot, base_height = 4, base_width = 10)
+likert_21plot
 ```
 
 ![](DEemailpoll_files/figure-markdown_github/Likert%20cross%20tabs%20on%20target%20email%20data-1.png)
+
+``` r
+
+likert_22 <- likert(targetdata, grouping = targetdata_grouping$CurrentEmails)
+likert_22plot <- plot(likert_22)
+save_plot("likert_22.jpg", likert_22plot, base_height = 4, base_width = 10)
+likert_22plot
+```
+
+![](DEemailpoll_files/figure-markdown_github/Likert%20cross%20tabs%20on%20target%20email%20data-2.png)
+
+``` r
+
+likert_23 <- likert(targetdata, grouping = targetdata_grouping$Overwhelmed)
+likert_23plot <- plot(likert_23)
+save_plot("likert_23.jpg", likert_23plot, base_height = 4, base_width = 10)
+likert_23plot
+```
+
+![](DEemailpoll_files/figure-markdown_github/Likert%20cross%20tabs%20on%20target%20email%20data-3.png)
 
 ``` r
 overwhelmeddata <-
@@ -617,7 +663,36 @@ overwhelmeddata_grouping$CurrentPosition <- factor(overwhelmeddata_grouping$Curr
                                               "Full professor"))
 
 likert_31 <- likert(overwhelmeddata, grouping = overwhelmeddata_grouping$CurrentPosition)
-plot(likert_31)
+likert_31plot <- plot(likert_31)
+save_plot("likert_31.jpg", likert_31plot, base_height = 4, base_width = 10)
+likert_31plot
 ```
 
 ![](DEemailpoll_files/figure-markdown_github/Likert%20analysis%20of%20overwhelmed%20question-1.png)
+
+``` r
+# First, make a new variable that splits these out
+diffpathdata <- subset(emaildata, CurrentPosition == "AssistantProfessor" | CurrentPosition == "Associate professor" | CurrentPosition == "Full professor" | CurrentPosition == "Research scientist in government" | CurrentPosition == "Research scientist in academia" | CurrentPosition == "Research scientist in industry" | CurrentPosition == "Scientist at an NGO/non-profit" | CurrentPosition == "Other government position")
+
+diffpathdata$path <- ifelse(diffpathdata$CurrentPosition == "AssistantProfessor" | diffpathdata$CurrentPosition == "Associate professor" | diffpathdata$CurrentPosition == "Full professor" | diffpathdata$CurrentPosition == "Research scientist in academia", "academia",
+                            ifelse(diffpathdata$CurrentPosition == "Research scientist in government" | diffpathdata$CurrentPosition == "Other government position", "government",
+                            ifelse(diffpathdata$CurrentPosition == "Scientist at an NGO/non-profit", "nonprofit","industry"
+                            )))
+
+PathSampleSize <-
+  diffpathdata %>%
+  group_by(path) %>%
+  summarise(n=n())
+
+PathSampleSize
+#> Source: local data frame [4 x 2]
+#> 
+#>         path     n
+#>        (chr) (int)
+#> 1   academia   114
+#> 2 government    23
+#> 3   industry     4
+#> 4  nonprofit    13
+
+#hmm, small sample sizes. Not sure it would be useful to compare them, unfortunately.
+```
